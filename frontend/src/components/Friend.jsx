@@ -10,8 +10,6 @@ const Friend = ({ friendId, name, subtitle, userPictutePath }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { _id } = useSelector((state) => state.user);
-  // const user = useSelector((state) => state.user);
-  // console.log(user);
   const token = useSelector((state) => state.token);
   const friends = useSelector((state) => state.user.friends);
 
@@ -37,7 +35,6 @@ const Friend = ({ friendId, name, subtitle, userPictutePath }) => {
     );
 
     const data = await response.json();
-    console.log(data);
 
     dispatch(setFriends({ friends: data }));
   };
