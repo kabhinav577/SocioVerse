@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux';
 import UserWidget from 'scenes/widgets/UserWidget';
 import MyPostWidget from 'scenes/widgets/MyPostWidget';
 import PostsWidget from 'scenes/widgets/PostsWidget';
+import AdvertWidget from 'scenes/widgets/AdvertWidget';
 
 const HomePage = () => {
   const isNonMobileScreens = useMediaQuery('(min-width: 1000px)');
@@ -34,7 +35,11 @@ const HomePage = () => {
         </Box>
 
         {/* SHOWING ON DESKTOP ONLY */}
-        {isNonMobileScreens && <Box flexBasis="26%"> </Box>}
+        {isNonMobileScreens && (
+          <Box flexBasis="26%">
+            <AdvertWidget />
+          </Box>
+        )}
       </Box>
     </Box>
   );

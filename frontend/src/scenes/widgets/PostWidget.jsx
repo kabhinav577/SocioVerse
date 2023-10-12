@@ -25,7 +25,7 @@ const PostWidget = ({
 }) => {
   const [isComments, setIsComments] = useState(false);
   const dispatch = useDispatch();
-  const { token } = useSelector((state) => state.token);
+  const token = useSelector((state) => state.token);
   const loggedInUserId = useSelector((state) => state.user._id);
   const isLiked = Boolean(likes[loggedInUserId]);
   const likeCount = Object.keys(likes).length;
@@ -35,7 +35,7 @@ const PostWidget = ({
   const primary = palette.neutral.medium;
 
   const patchLike = async () => {
-    const response = await fetch(`http:localhost:3001/posts/${postId}/like`, {
+    const response = await fetch(`http://localhost:3001/posts/${postId}/like`, {
       method: 'PATCH',
       headers: {
         Authorization: `Bearer ${token}`,
@@ -43,6 +43,7 @@ const PostWidget = ({
       },
       body: JSON.stringify({ userId: loggedInUserId }),
     });
+    console.log(response);
 
     const updatePost = await response.json();
     dispatch(setPost({ post: updatePost }));
@@ -84,7 +85,7 @@ const PostWidget = ({
 
           {/* THIS FOR COMMENT */}
           <FlexBetween gap="0.3rem">
-            <IconButton onClick={() => setIsComments(isComments)}>
+            <IconButton onClick={() => setIsComments(!isComments)}>
               <ChatBubbleOutlineOutlined />
             </IconButton>
             <Typography>{comments.length}</Typography>
