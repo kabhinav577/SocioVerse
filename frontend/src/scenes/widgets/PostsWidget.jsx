@@ -38,9 +38,11 @@ const PostsWidget = ({ userId, isProfile = false }) => {
     }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
+  // IMPORTANT NOTE:: -> in my code error encountered posts.map is not function and solve this error by using Array.from(posts) --- this particular code is used because of storing posts data in form of [].
+
   return (
     <>
-      {posts.map(
+      {Array.from(posts).map(
         ({
           _id,
           userId,
