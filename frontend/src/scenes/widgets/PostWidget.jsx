@@ -95,7 +95,9 @@ const PostWidget = ({
           <ShareOutlined />
         </IconButton>
       </FlexBetween>
-      {isComments && <CommentLists name={name} comments={comments} />}
+      {isComments && (
+        <CommentLists name={name} postId={postId} comments={comments} />
+      )}
     </WidgetWrapper>
   );
 };

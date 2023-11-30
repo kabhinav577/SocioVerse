@@ -8,13 +8,16 @@ import {
   InputBase,
   useMediaQuery,
 } from '@mui/material';
-import { useSelector } from 'react-redux';
+import { setPost } from 'state';
+import { useSelector, useDispatch } from 'react-redux';
 
-const CommentLists = ({ name, comments }) => {
+const CommentLists = ({ name, comments, postId }) => {
   const [newComment, setNewComment] = useState('');
   const { palette } = useTheme();
-  const posts = useSelector((state) => state.posts);
+  // const posts = useSelector((state) => state.posts);
+  const token = useSelector((state) => state.token);
   const isNonMobileScreens = useMediaQuery('(min-width: 1000px)');
+  const dispatch = useDispatch();
 
   const main = palette.neutral.main;
 
@@ -22,7 +25,50 @@ const CommentLists = ({ name, comments }) => {
     setNewComment(e.target.value);
   };
 
-  const handleSubmit = () => {};
+  const handleCommentSubmit = async (e, postId, comment) => {
+    e.preventDefault(); // Prevent the default form submission
+    try {
+      const response = await fetch(
+        `http://localhost:3001/posts/${postId}/comments`,
+        {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ comment }),
+        }
+      );
+
+      if (response.ok) {
+        // Fetch the updated post data after adding the comment
+        const updatedResponse = await fetch(
+          `http://localhost:3001/posts/${postId}`,
+          {
+            method: 'GET',
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (updatedResponse.ok) {
+          const updatedPost = await updatedResponse.json();
+
+          // Dispatch the setPost action to update the Redux state with the modified post
+          setNewComment('');
+          dispatch(setPost({ post: updatedPost }));
+        } else {
+          console.error('Failed to fetch updated post data');
+        }
+      } else {
+        // Handle error
+        console.error('Failed to submit comment');
+      }
+    } catch (error) {
+      console.error('Error submitting comment:', error);
+    }
+  };
 
   return (
     <Box mt="0.5rem">
@@ -51,7 +97,7 @@ const CommentLists = ({ name, comments }) => {
         </Box>
       ))}
 
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={(e) => handleCommentSubmit(e, postId, newComment)}>
         <Box
           mt="0.5rem"
           display="flex"
@@ -75,6 +121,7 @@ const CommentLists = ({ name, comments }) => {
           />
           <button
             disabled={!newComment}
+            type="submit"
             style={{
               width: '10%',
               position: 'absolute',

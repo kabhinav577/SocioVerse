@@ -166,6 +166,9 @@ const MyPostWidget = ({ picturePath }) => {
             backgroundColor: palette.primary.main,
             borderRadius: '3rem',
           }}
+          style={{
+            color: 'black',
+          }}
         >
           Post
         </Button>
